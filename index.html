@@ -163,12 +163,19 @@
             padding: 4px;
             background: linear-gradient(135deg, rgba(255, 60, 60, 0.4), rgba(255, 255, 255, 0.15));
             box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5), 0 0 40px rgba(255, 50, 50, 0.08);
-            animation: profilePulse 3s ease-in-out infinite alternate;
+            animation: logoFloat 3s ease-in-out infinite, logoGlow 3s ease-in-out infinite alternate;
         }
 
-        @keyframes profilePulse {
+        /* Subtle floating — gentle up/down */
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+
+        /* Soft pulsing glow */
+        @keyframes logoGlow {
             0% { box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5), 0 0 30px rgba(255, 50, 50, 0.06); }
-            100% { box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5), 0 0 50px rgba(255, 50, 50, 0.12); }
+            100% { box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5), 0 0 50px rgba(255, 50, 50, 0.15), 0 0 80px rgba(255, 50, 50, 0.06); }
         }
 
         .profile-img {
@@ -256,6 +263,28 @@
             text-shadow: 0 0 20px var(--text-glow), 0 0 60px rgba(255, 255, 255, 0.05);
             margin-bottom: 6px;
             line-height: 1.3;
+            min-height: 1.82em; /* prevent layout shift */
+        }
+
+        /* Fade-in letter animation */
+        .fade-letter {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(8px);
+            animation: letterFadeIn 0.5s ease forwards;
+        }
+
+        /* Space between words */
+        .fade-space {
+            display: inline-block;
+            width: 0.35em;
+        }
+
+        @keyframes letterFadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .profile-subtitle {
@@ -494,7 +523,7 @@
 
         <!-- Title Section -->
         <div class="title-section">
-            <h1 class="profile-title">SHEIKH GAMING FAMILY</h1>
+            <h1 class="profile-title" id="typingTitle"></h1>
             <p class="profile-subtitle">Sheikh_Gaming</p>
         </div>
 
@@ -535,6 +564,30 @@
         </div>
 
     </main>
+
+    <!-- Fade-in letter animation script -->
+    <script>
+        (function() {
+            const title = document.getElementById('typingTitle');
+            const text = 'SHEIKH GAMING FAMILY';
+            let delay = 0;
+
+            for (let i = 0; i < text.length; i++) {
+                if (text[i] === ' ') {
+                    const space = document.createElement('span');
+                    space.className = 'fade-space';
+                    title.appendChild(space);
+                } else {
+                    const span = document.createElement('span');
+                    span.className = 'fade-letter';
+                    span.textContent = text[i];
+                    span.style.animationDelay = (0.6 + delay * 0.06) + 's';
+                    title.appendChild(span);
+                    delay++;
+                }
+            }
+        })();
+    </script>
 
 </body>
 </html>
